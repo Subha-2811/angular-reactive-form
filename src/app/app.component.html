@@ -7,27 +7,15 @@
       <input
         type="text"
         class="form-control"
-        [class.is-invalid]="
-          username?.invalid &&
-          username?.touched
-        "
+        [class.is-invalid]="username?.invalid && username?.touched"
         formControlName="username"
       />
-      <div
-        *ngIf="
-          username?.invalid &&
-          username?.touched
-        "
-      >
+      <div *ngIf="username?.invalid && username?.touched">
         <!-- {{username?.errors?.['minlength'] | json}} -->
-        <small
-          class="text-danger"
-          *ngIf="username?.errors?.['required']"
+        <small class="text-danger" *ngIf="username?.errors?.['required']"
           >Username is required</small
         >
-        <small
-          class="text-danger"
-          *ngIf="username?.errors?.['minlength']"
+        <small class="text-danger" *ngIf="username?.errors?.['minlength']"
           >Username must be atleast 3 characters</small
         >
       </div>
@@ -42,9 +30,13 @@
       <label>Confirm Password</label>
       <input
         type="password"
+        [class.is-invalid]="registrationForm.errors?.['misMatch']"
         class="form-control"
         formControlName="confirmPassword"
       />
+      <small *ngIf="registrationForm.errors?.['misMatch']" class="text-danger"
+        >Password does not match</small
+      >
     </div>
 
     <!-- Nested Form Group -->
