@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 // Creating Form Using FormBuilder
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 
 // Creating Form Using FormGroup and FormControl
 // import { FormControl, FormGroup } from '@angular/forms';
@@ -14,10 +14,15 @@ import { FormBuilder } from '@angular/forms';
 export class AppComponent {
   // Creating Form Using FormBuilder
 
+  get username(){
+    console.log(this.registrationForm.get('username'))
+    return this.registrationForm.get('username')
+  }
+
   constructor(private fb: FormBuilder) {}
 
   registrationForm = this.fb.group({
-    username: [''],
+    username: ['', [Validators.required, Validators.minLength(3)]],
     password: [''],
     confirmPassword: [''],
     address: this.fb.group({
@@ -26,6 +31,7 @@ export class AppComponent {
       postalCode: [''],
     }),
   });
+      
 
   // Creating Form Using FormGroup and FormControl
 
