@@ -20,7 +20,8 @@
         formControlName="confirmPassword"
       />
     </div>
-
+    
+    <!-- Nested Form Group -->
     <div formGroupName="address">
       <div class="form-group">
         <label>City</label>
@@ -37,5 +38,6 @@
     </div>
 
     <button class="btn btn-primary" type="submit">Register</button>
+    <button (click)="loadApiData()" class="btn btn-secondary ml-2" type="button">Load Api Data</button>
   </form>
 </div>
