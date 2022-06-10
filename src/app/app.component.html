@@ -1,13 +1,13 @@
-<div class="container-fluid">
+<div class="container">
   <h2>Registration Form</h2>
   <!-- {{ registrationForm.value | json }} -->
-  <form [formGroup]="registrationForm">
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <div class="form-group">
       <label>Username</label>
       <input
         type="text"
         class="form-control"
-        [ngClass]="{'is-invalid':username?.invalid && username?.touched}"
+        [ngClass]="{ 'is-invalid': username?.invalid && username?.touched }"
         formControlName="username"
       />
       <div *ngIf="username?.invalid && username?.touched">
@@ -27,9 +27,9 @@
         type="email"
         class="form-control"
         formControlName="email"
-        [ngClass]="{'is-invalid':email?.invalid && email?.touched}"
+        [ngClass]="{ 'is-invalid': email?.invalid && email?.touched }"
       />
-      
+
       <div *ngIf="email?.invalid && email?.touched">
         <small *ngIf="email?.errors?.['required']">Email is required</small>
         <small *ngIf="email?.errors?.['email']">Invalid Email</small>
@@ -53,7 +53,7 @@
       <label>Confirm Password</label>
       <input
         type="password"
-        [class.is-invalid]="registrationForm.errors?.['misMatch']"
+        [ngClass]="{'is-invalid': registrationForm?.errors?.['misMatch']}"
         class="form-control"
         formControlName="confirmPassword"
       />
@@ -62,19 +62,39 @@
       >
     </div>
 
-    <!-- Nested Form Group -->
-    <div formGroupName="address">
-      <div class="form-group">
-        <label>City</label>
-        <input type="text" class="form-control" formControlName="city" />
-      </div>
-      <div class="form-group">
-        <label>State</label>
-        <input type="text" class="form-control" formControlName="state" />
-      </div>
-      <div class="form-group">
-        <label>Postal Code</label>
-        <input type="text" class="form-control" formControlName="postalCode" />
+    <!-- Dynamic Form -->
+    <label><h5>Address</h5></label>
+    <button
+      class="btn btn-secondary btn-sm ml-2"
+      type="button"
+      (click)="addAddressRow()"
+    >
+      Add Address
+    </button>
+    <div formArrayName="addresses">
+      <!-- Nested Form Group -->
+      <div
+        *ngFor="let address of addresses.controls; let i = index"
+        [formGroupName]="i"
+        class="jumbotron py-2 px-3"
+      >
+        <div class="form-group">
+          <label>City</label>
+          <input type="text" class="form-control" formControlName="city" />
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" class="form-control" formControlName="state" />
+        </div>
+        <div class="form-group">
+          <label>Postal Code</label>
+          <input
+            type="text"
+            class="form-control"
+            formControlName="postalCode"
+          />
+        </div>
+        <button *ngIf="addresses.length > 1" (click)="deleteAddressRow(i)" class="btn btn-sm btn-danger">Delete Address</button>
       </div>
     </div>
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 // Creating Form Using FormBuilder
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, Validators } from '@angular/forms';
 
 // Cross Validation
 import { PasswordValidator } from './shared/password.validator';
@@ -23,6 +23,11 @@ export class AppComponent {
     return this.registrationForm.get('email');
   }
 
+  // Dynamic Forms
+  get addresses() {
+    return this.registrationForm.get('addresses') as FormArray;
+  }
+
   // Creating Form Using FormBuilder
 
   constructor(private fb: FormBuilder) {}
@@ -34,14 +39,29 @@ export class AppComponent {
       subscribe: [false],
       password: [''],
       confirmPassword: [''],
-      address: this.fb.group({
-        city: [''],
-        state: [''],
-        postalCode: [''],
-      }),
+
+      // Dynamic Forms
+      addresses: this.fb.array([this.initAddressModel()]),
     },
     { validator: PasswordValidator }
   );
+
+  initAddressModel() {
+    return this.fb.group({
+      city: [''],
+      state: [''],
+      postalCode: [''],
+    });
+  }
+
+  // Dynamic Forms
+  addAddressRow() {
+    this.addresses.push(this.initAddressModel());
+  }
+
+  deleteAddressRow(i: number) {
+    this.addresses.removeAt(i);
+  }
 
   // Creating Form Using FormGroup and FormControl
 
@@ -56,9 +76,8 @@ export class AppComponent {
   //   }),
   // });
 
-  // Conditional Validation
-
   ngOnInit() {
+    // Conditional Validation
     this.registrationForm
       .get('subscribe')
       ?.valueChanges.subscribe((checked) => {
@@ -81,11 +100,13 @@ export class AppComponent {
       subscribe: false,
       password: 'test',
       confirmPassword: 'test',
-      address: {
-        city: 'Jamshedpur',
-        state: 'Jharkhand',
-        postalCode: '831012',
-      },
+      addresses: [
+        {
+          city: 'Jamshedpur',
+          state: 'Jharkhand',
+          postalCode: '831012',
+        },
+      ],
     });
 
     // If we need to add few of the fields then we can use patchValue()
@@ -95,5 +116,9 @@ export class AppComponent {
     //   password: 'test',
     //   confirmPassword: 'test',
     // });
+  }
+  onSubmit() {
+    console.log(this.registrationForm.value);
+    this.registrationForm.reset();
   }
 }
